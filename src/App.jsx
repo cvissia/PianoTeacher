@@ -294,7 +294,7 @@ function App() {
   
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8">Piano MIDI Learning App</h1>
+      <h1 className="text-3xl font-bold mb-8">Piano Teacher</h1>
       
       {/* File Upload */}
       {!midiData && (
