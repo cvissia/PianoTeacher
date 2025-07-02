@@ -564,7 +564,7 @@ function App() {
                       : 'bg-gray-200 hover:bg-gray-300'
                   }`}
                 >
-                  Left Hand (Track 0)
+                  Right Hand (Track 1)
                 </button>
                 <button
                   onClick={() => handleHandChange('right')}
@@ -574,7 +574,7 @@ function App() {
                       : 'bg-gray-200 hover:bg-gray-300'
                   }`}
                 >
-                  Right Hand (Track 1)
+                  Left Hand (Track 0)
                 </button>
               </div>
               <p className="mt-2 text-sm text-gray-600">
