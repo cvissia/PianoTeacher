@@ -285,9 +285,9 @@ function App() {
         synthRef.current.triggerAttackRelease(note.name, note.duration, time, note.velocity);
         
         Tone.Draw.schedule(() => {
-          setActiveNotes(prev => [...prev, note.name]);
+          setActiveNotes(prev => [...prev, { name: note.name, trackIndex: note.trackIndex }]);
           setTimeout(() => {
-            setActiveNotes(prev => prev.filter(n => n !== note.name));
+            setActiveNotes(prev => prev.filter(n => n.name !== note.name));
           }, note.duration * 1000);
         }, time);
       }, relativeTime);

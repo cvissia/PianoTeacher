@@ -57,7 +57,11 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
         {/* White keys layer */}
         <div className="absolute inset-0 flex">
           {whiteKeys.map((key, idx) => {
-            const isActive = activeNotes.includes(key.note);
+            const activeNote = activeNotes.find(n => 
+              typeof n === 'string' ? n === key.note : n.name === key.note
+            );
+            const isActive = !!activeNote;
+            const trackIndex = typeof activeNote === 'object' ? activeNote.trackIndex : null;
             return (
               <div
                 key={key.note}
@@ -65,7 +69,7 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
                 className={`
                   relative flex-shrink-0 bg-white border border-gray-400 cursor-pointer
                   hover:bg-gray-100 transition-colors duration-75
-                  ${isActive ? '!bg-blue-400' : ''}
+                  ${isActive ? (trackIndex === 0 ? '!bg-blue-400' : trackIndex === 1 ? '!bg-green-400' : '!bg-blue-400') : ''}
                 `}
                 style={{ width: `${keyWidth}px`, height: '100%' }}
                 title={key.note}
@@ -80,7 +84,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
             );
           })}
         </div>
-        
         {/* Black keys layer */}
         <div className="absolute inset-0 pointer-events-none">
           {whiteKeys.map((whiteKey, idx) => {
@@ -88,11 +91,15 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
             if (!hasBlackKeyAfter(whiteKey.note)) return null;
             
             // Find the corresponding black key
-            const blackKeyNote = whiteKey.note.replace(/([A-G])(\d+)/, (match, note, octave) => {
+            const blackKeyNote = whiteKey.note.replace(/([A-G])(\d+)/, (_, note, octave) => {
               return `${note}#${octave}`;
             });
             
-            const isActive = activeNotes.includes(blackKeyNote);
+            const activeNote = activeNotes.find(n => 
+              typeof n === 'string' ? n === blackKeyNote : n.name === blackKeyNote
+            );
+            const isActive = !!activeNote;
+            const trackIndex = typeof activeNote === 'object' ? activeNote.trackIndex : null;
             
             return (
               <div
@@ -110,7 +117,7 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
                   className={`
                     w-full h-full bg-gray-900 cursor-pointer
                     hover:bg-gray-700 transition-colors duration-75 z-10
-                    ${isActive ? '!bg-blue-600' : ''}
+                    ${isActive ? (trackIndex === 0 ? '!bg-blue-600' : trackIndex === 1 ? '!bg-green-600' : '!bg-blue-600') : ''}
                   `}
                   title={blackKeyNote}
                 />
@@ -133,7 +140,7 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
   // Auto-scroll to active notes
   useEffect(() => {
     if (activeNotes.length > 0 && keyboardRef.current && autoScrollEnabled) {
-      const firstActiveNote = activeNotes[0];
+      const firstActiveNote = typeof activeNotes[0] === 'string' ? activeNotes[0] : activeNotes[0].name;
       const whiteKeys = allKeys.filter(k => !k.isBlack);
       const noteIndex = whiteKeys.findIndex(k => k.note === firstActiveNote);
       
@@ -212,7 +219,7 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
       
       <div className="mt-2 flex justify-between text-xs text-gray-600">
         <span>🎹 88 Keys (A0 - C8)</span>
-        <span>Click keys to play • Active notes highlighted in blue</span>
+        <span>Click keys to play • Left hand: green, Right hand: blue</span>
       </div>
     </div>
   );
