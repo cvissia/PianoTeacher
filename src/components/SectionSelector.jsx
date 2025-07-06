@@ -1,7 +1,6 @@
 import React from 'react';
 
 const SectionSelector = ({ sections = [], currentSection = 0, onSectionChange, sectionProgress = {} }) => {
-  // Add safety check
   if (!sections || sections.length === 0) {
     return (
       <div className="mb-6">

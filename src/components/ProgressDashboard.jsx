@@ -1,4 +1,3 @@
-// src/components/ProgressDashboard.jsx
 import React from 'react';
 import { BarChart, Clock, Music, TrendingUp } from 'lucide-react';
 import StorageService from '../services/storageService';
@@ -7,7 +6,6 @@ const ProgressDashboard = ({ isVisible, onClose }) => {
   const stats = StorageService.getPracticeStats();
   const recentFiles = StorageService.getRecentFiles();
   
-  // Calculate streak
   const calculateStreak = () => {
     const daily = stats.daily;
     const dates = Object.keys(daily).sort().reverse();
