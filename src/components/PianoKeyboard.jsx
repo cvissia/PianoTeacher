@@ -6,19 +6,15 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
   const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
   const keyboardRef = useRef(null);
   
-  // Piano key definitions
   const octavePattern = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
   
-  // Generate all 88 keys
   const generateAllKeys = () => {
     const keys = [];
     
-    // A0, A#0, B0
     keys.push({ note: 'A0', midi: 21, isBlack: false });
     keys.push({ note: 'A#0', midi: 22, isBlack: true });
     keys.push({ note: 'B0', midi: 23, isBlack: false });
     
-    // Octaves 1-7 (full octaves)
     for (let octave = 1; octave <= 7; octave++) {
       octavePattern.forEach((note, idx) => {
         const isBlack = note.includes('#');
@@ -31,7 +27,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
       });
     }
     
-    // C8
     keys.push({ note: 'C8', midi: 108, isBlack: false });
     
     return keys;
@@ -39,13 +34,11 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
   
   const allKeys = generateAllKeys();
   
-  // Helper function to determine if a white key should have a black key after it
   const hasBlackKeyAfter = (noteName) => {
-    const note = noteName.replace(/\d+/, ''); // Remove octave number
+    const note = noteName.replace(/\d+/, '');
     return note !== 'E' && note !== 'B';
   };
   
-  // Create visual layout
   const createKeyboard = () => {
     const whiteKeys = allKeys.filter(k => !k.isBlack);
     const keyWidth = 30 * zoomLevel;
@@ -54,7 +47,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
     
     return (
       <div className="relative" style={{ height: `${150 * zoomLevel}px` }}>
-        {/* White keys layer */}
         <div className="absolute inset-0 flex">
           {whiteKeys.map((key, idx) => {
             const activeNote = activeNotes.find(n => 
@@ -84,13 +76,10 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
             );
           })}
         </div>
-        {/* Black keys layer */}
         <div className="absolute inset-0 pointer-events-none">
           {whiteKeys.map((whiteKey, idx) => {
-            // Check if this white key should have a black key after it
             if (!hasBlackKeyAfter(whiteKey.note)) return null;
             
-            // Find the corresponding black key
             const blackKeyNote = whiteKey.note.replace(/([A-G])(\d+)/, (_, note, octave) => {
               return `${note}#${octave}`;
             });
@@ -129,7 +118,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
     );
   };
   
-  // Handle scroll
   useEffect(() => {
     if (keyboardRef.current) {
       const scrollWidth = keyboardRef.current.scrollWidth - keyboardRef.current.clientWidth;
@@ -137,7 +125,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
     }
   }, [scrollPosition]);
   
-  // Auto-scroll to active notes
   useEffect(() => {
     if (activeNotes.length > 0 && keyboardRef.current && autoScrollEnabled) {
       const firstActiveNote = typeof activeNotes[0] === 'string' ? activeNotes[0] : activeNotes[0].name;
@@ -149,7 +136,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
         const scrollTo = noteIndex * keyWidth - (keyboardRef.current.clientWidth / 2) + (keyWidth / 2);
         keyboardRef.current.scrollLeft = scrollTo;
         
-        // Update slider position
         const scrollWidth = keyboardRef.current.scrollWidth - keyboardRef.current.clientWidth;
         setScrollPosition((scrollTo / scrollWidth) * 100);
       }
@@ -161,7 +147,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-lg font-semibold">Virtual Piano</h3>
         <div className="flex items-center gap-4">
-          {/* Zoom Control */}
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-600">Zoom:</span>
             <input
@@ -176,7 +161,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
             <span className="text-xs font-mono w-12">{Math.round(zoomLevel * 100)}%</span>
           </div>
           
-          {/* Navigation Control */}
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-600">Navigate:</span>
             <span className="text-xs font-mono">A0</span>
@@ -191,7 +175,6 @@ const PianoKeyboard = ({ activeNotes = [], onNoteClick }) => {
             <span className="text-xs font-mono">C8</span>
           </div>
           
-          {/* Auto-scroll Toggle */}
           <label className="flex items-center gap-1 cursor-pointer">
             <input
               type="checkbox"

@@ -23,7 +23,6 @@ function App() {
   const [currentFileName, setCurrentFileName] = useState('');
   const [showStats, setShowStats] = useState(false);
   
-  // localStorage hooks
   const [preferences, updatePreferences] = usePreferences();
   const [songProgress, updateSongProgress] = useSongProgress(currentSongId);
   const [practiceStats, recordSession] = usePracticeStats();
@@ -64,7 +63,7 @@ function App() {
       // Save session stats on unmount
       if (practiceTime.current > 0) {
         recordSession({
-          duration: practiceTime.current / 60, // Convert to minutes
+          duration: practiceTime.current / 60,
           sectionsCompleted: Object.keys(sectionProgress).length,
           notesPlayed: notesPlayedCount.current
         });

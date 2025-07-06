@@ -1,8 +1,5 @@
-// src/services/storageService.js
-
 const STORAGE_PREFIX = 'pianoTeacher_';
 
-// Storage keys
 const KEYS = {
   USER_PREFERENCES: `${STORAGE_PREFIX}preferences`,
   SONG_PROGRESS: `${STORAGE_PREFIX}songProgress`,
@@ -12,7 +9,6 @@ const KEYS = {
 };
 
 class StorageService {
-  // Generic storage methods with error handling
   static setItem(key, value) {
     try {
       const serialized = JSON.stringify(value);
@@ -44,7 +40,6 @@ class StorageService {
     }
   }
 
-  // Check if localStorage is available
   static isAvailable() {
     try {
       const testKey = '__localStorage_test__';
@@ -56,7 +51,6 @@ class StorageService {
     }
   }
 
-  // User Preferences
   static savePreferences(preferences) {
     return this.setItem(KEYS.USER_PREFERENCES, {
       ...this.getPreferences(),
@@ -76,7 +70,6 @@ class StorageService {
     });
   }
 
-  // Song Progress Tracking
   static saveSongProgress(songId, progress) {
     const allProgress = this.getSongProgress();
     allProgress[songId] = {
@@ -91,7 +84,6 @@ class StorageService {
     return songId ? allProgress[songId] || null : allProgress;
   }
 
-  // Practice Statistics
   static updatePracticeStats(sessionData) {
     const stats = this.getPracticeStats();
     const today = new Date().toISOString().split('T')[0];
@@ -129,20 +121,16 @@ class StorageService {
     });
   }
 
-  // Recent Files Management
   static addRecentFile(fileInfo) {
     const recentFiles = this.getRecentFiles();
     
-    // Remove if already exists
     const filtered = recentFiles.filter(f => f.name !== fileInfo.name);
     
-    // Add to beginning
     filtered.unshift({
       ...fileInfo,
       lastOpened: Date.now()
     });
     
-    // Keep only last 10 files
     const trimmed = filtered.slice(0, 10);
     
     return this.setItem(KEYS.RECENT_FILES, trimmed);
@@ -152,14 +140,12 @@ class StorageService {
     return this.getItem(KEYS.RECENT_FILES, []);
   }
 
-  // Clear all app data
   static clearAllData() {
     Object.values(KEYS).forEach(key => {
       this.removeItem(key);
     });
   }
 
-  // Export all data (for backup)
   static exportData() {
     const data = {};
     Object.entries(KEYS).forEach(([name, key]) => {
@@ -168,7 +154,6 @@ class StorageService {
     return data;
   }
 
-  // Import data (restore backup)
   static importData(data) {
     try {
       Object.entries(KEYS).forEach(([name, key]) => {

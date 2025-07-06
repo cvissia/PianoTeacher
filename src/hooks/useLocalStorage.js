@@ -1,9 +1,6 @@
-// src/hooks/useLocalStorage.js
-
 import { useState, useEffect } from 'react';
 import StorageService from '../services/storageService';
 
-// Custom hook for localStorage with React state sync
 export function useLocalStorage(key, defaultValue) {
   const [value, setValue] = useState(() => {
     return StorageService.getItem(key, defaultValue);
@@ -16,7 +13,6 @@ export function useLocalStorage(key, defaultValue) {
   return [value, setValue];
 }
 
-// Hook for user preferences
 export function usePreferences() {
   const [preferences, setPreferences] = useState(() => 
     StorageService.getPreferences()
@@ -31,7 +27,6 @@ export function usePreferences() {
   return [preferences, updatePreferences];
 }
 
-// Hook for song progress
 export function useSongProgress(songId) {
   const [progress, setProgress] = useState(() => 
     StorageService.getSongProgress(songId) || {
@@ -53,7 +48,6 @@ export function useSongProgress(songId) {
   return [progress, updateProgress];
 }
 
-// Hook for practice statistics
 export function usePracticeStats() {
   const [stats, setStats] = useState(() => 
     StorageService.getPracticeStats()
