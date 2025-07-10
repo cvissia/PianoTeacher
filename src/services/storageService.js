@@ -65,7 +65,7 @@ class StorageService {
       volume: 75,
       selectedHand: 'both',
       barsPerSection: 4,
-      isLooping: true,
+      isLooping: false,
       theme: 'light'
     });
   }
